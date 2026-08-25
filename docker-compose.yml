@@ -1,0 +1,21 @@
+services:
+
+  postgres:
+    image: postgres:16
+
+    container_name: uk_food_hygiene_postgres
+
+    environment:
+      POSTGRES_DB: food_hygiene
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+    - "5433:5432"
+      
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:
