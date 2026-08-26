@@ -1,0 +1,16 @@
+name: 'uk_food_hygiene'
+version: '1.0.0'
+config-version: 2
+
+profile: 'uk_food_hygiene'
+
+model-paths: ["models"]
+test-paths: ["tests"]
+
+models:
+  uk_food_hygiene:
+    staging:
+      +materialized: view
+
+    silver:
+      +materialized: table

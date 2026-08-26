@@ -3,3 +3,4 @@ requests
 scikit-learn
 jupyter
 psycopg2-binary
+dbt-postgres

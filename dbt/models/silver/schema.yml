@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: fsa_establishments_clean
+
+    columns:
+      - name: bronze_id
+        tests:
+          - not_null
+          - unique
+
+      - name: fhrsid
+        tests:
+          - not_null
+
+      - name: business_name
+        tests:
+          - not_null
+
+      - name: rating_value
+        tests:
+          - not_null
