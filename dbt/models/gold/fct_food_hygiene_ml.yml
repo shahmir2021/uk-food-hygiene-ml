@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: fct_food_hygiene_ml
+    description: "Gold model containing model-ready food hygiene features and binary target."
+
+    columns:
+
+      - name: fhrsid
+        tests:
+          - not_null
+          - unique
+
+      - name: business_type
+        tests:
+          - not_null
+
+      - name: local_authority_name
+        tests:
+          - not_null
+
+      - name: postcode_area
+        tests:
+          - not_null
+
+      - name: rating_year
+        tests:
+          - not_null
+
+      - name: rating_month
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+
+      - name: coordinates_missing
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+
+      - name: is_low_hygiene_rating
+        tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]

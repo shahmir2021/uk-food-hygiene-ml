@@ -7,7 +7,7 @@ from psycopg2.extras import execute_values, Json
 # 1. Load the raw FSA JSON file
 # -----------------------------------
 
-with open("data/raw/fsa_westminster_sample.json", "r") as file:
+with open("data/raw/fsa_development_sample.json", "r") as file:
     raw_data = json.load(file)
 
 establishments = raw_data["establishments"]
@@ -28,6 +28,10 @@ connection = psycopg2.connect(
 )
 
 cursor = connection.cursor()
+# Remove the old 100-row development sample
+cursor.execute(
+    "TRUNCATE TABLE bronze.fsa_establishments_raw RESTART IDENTITY;"
+)
 
 
 # -----------------------------------

@@ -9,8 +9,15 @@ test-paths: ["tests"]
 
 models:
   uk_food_hygiene:
+
     staging:
+      +schema: staging
       +materialized: view
 
     silver:
+      +schema: silver
+      +materialized: table
+
+    gold:
+      +schema: gold
       +materialized: table
