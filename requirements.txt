@@ -5,3 +5,5 @@ jupyter
 psycopg2-binary
 dbt-postgres
 matplotlib
+optuna
+shap
