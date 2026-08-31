@@ -1,0 +1,32 @@
+version: 2
+
+models:
+  - name: fct_food_hygiene_full_ml
+    description: "Full-scale FHRS machine learning dataset."
+
+    columns:
+
+      - name: fhrsid
+        description: "Unique FSA establishment identifier."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: business_type
+        data_tests:
+          - not_null
+
+      - name: rating_value
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1, 2, 3, 4, 5]
+
+      - name: low_hygiene
+        description: "Binary ML target where 1 represents ratings 0 to 2."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: [0, 1]

@@ -218,4 +218,4 @@ __marimo__/
 .streamlit/secrets.toml
 .DS_Store
 # dbt local database credentials
-dbt/profiles.yml
+dbt/profiles.ymldata/raw/fsa_establishments_full.csv

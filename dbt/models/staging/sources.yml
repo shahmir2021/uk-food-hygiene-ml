@@ -6,3 +6,6 @@ sources:
 
     tables:
       - name: fsa_establishments_raw
+
+      - name: fsa_establishments_full_raw
+        description: "Full FSA bulk dataset loaded from the official daily open data CSV."
