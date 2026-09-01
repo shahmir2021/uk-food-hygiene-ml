@@ -1,0 +1,25 @@
+{
+    "model": "RandomForestClassifier",
+    "stage": 11,
+    "threshold": 0.65,
+    "target": "low_hygiene",
+    "positive_class": 1,
+    "positive_class_meaning": "RatingValue 0, 1 or 2",
+    "training_rows": 389674,
+    "test_rows": 97419,
+    "best_parameters": {
+        "model__n_estimators": 200,
+        "model__min_samples_split": 100,
+        "model__min_samples_leaf": 25,
+        "model__max_features": "log2",
+        "model__max_depth": 15
+    },
+    "test_metrics": {
+        "accuracy": 0.9314815385089151,
+        "precision": 0.1465305350727926,
+        "recall": 0.26396457765667575,
+        "f1": 0.1884498480243161,
+        "pr_auc": 0.12278977815197549,
+        "roc_auc": 0.7950706340754002
+    }
+}

@@ -1,0 +1,12 @@
+business_type,Actual_Low,False_Negatives,FN_Rate
+Hospitals/Childcare/Caring Premises,44,44,1.0
+Hotel/bed & breakfast/guest house,29,29,1.0
+Mobile caterer,59,59,1.0
+Other catering premises,119,119,1.0
+Pub/bar/nightclub,201,201,1.0
+School/college/university,32,32,1.0
+Retailers - supermarkets/hypermarkets,66,64,0.9696969696969697
+Manufacturers/packers,27,26,0.9629629629629629
+Restaurant/Cafe/Canteen,860,704,0.8186046511627907
+Takeaway/sandwich shop,610,432,0.7081967213114754
+Retailers - other,877,440,0.5017103762827823

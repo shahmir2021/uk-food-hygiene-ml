@@ -219,3 +219,5 @@ __marimo__/
 .DS_Store
 # dbt local database credentials
 dbt/profiles.ymldata/raw/fsa_establishments_full.csv
+data/raw/fsa_establishments_full.csv
+dbt/profiles.yml
