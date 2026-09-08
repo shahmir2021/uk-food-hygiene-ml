@@ -1,17 +1,27 @@
 import os
-import subprocess
-
+import boto3
 import psycopg2
 
 
-# AWS S3 location
+# ============================================================
+# AWS S3 SETTINGS
+# ============================================================
+
 S3_BUCKET = os.environ["S3_BUCKET"]
+AWS_REGION = os.environ["AWS_REGION"]
+
+# Location of the full FSA dataset inside S3
 S3_KEY = "raw/fsa_establishments_full.csv"
 
-# Temporary local copy downloaded from S3
+# Temporary local copy inside the Airflow container
 LOCAL_FILE = "/tmp/fsa_establishments_full.csv"
 
-# CSV columns, kept in the same order as the FSA file
+
+# ============================================================
+# CSV COLUMN ORDER
+# Must match the order in the FSA CSV file
+# ============================================================
+
 COLUMNS = [
     "address_line1",
     "address_line2",
@@ -39,19 +49,31 @@ COLUMNS = [
 ]
 
 
+# ============================================================
+# 1. DOWNLOAD DATA FROM AWS S3
+# ============================================================
+
 print("Downloading FSA dataset from S3...")
 
-subprocess.run(
-    [
-        "aws",
-        "s3",
-        "cp",
-        f"s3://{S3_BUCKET}/{S3_KEY}",
-        LOCAL_FILE,
-    ],
-    check=True,
+# Connect to AWS S3 using boto3
+s3 = boto3.client(
+    "s3",
+    region_name=AWS_REGION,
 )
 
+# Download the full FSA CSV from S3
+s3.download_file(
+    S3_BUCKET,
+    S3_KEY,
+    LOCAL_FILE,
+)
+
+print("FSA dataset downloaded successfully.")
+
+
+# ============================================================
+# 2. CONNECT TO AWS RDS POSTGRESQL
+# ============================================================
 
 print("Connecting to AWS RDS...")
 
@@ -65,16 +87,20 @@ conn = psycopg2.connect(
 
 cur = conn.cursor()
 
+print("Connected to AWS RDS.")
 
-print("Creating Bronze table...")
+
+# ============================================================
+# 3. CREATE / RESET BRONZE TABLE
+# ============================================================
+
+print("Preparing Bronze table...")
 
 cur.execute(
     """
     CREATE SCHEMA IF NOT EXISTS bronze;
 
-    DROP TABLE IF EXISTS bronze.fsa_establishments_raw;
-
-    CREATE TABLE bronze.fsa_establishments_raw (
+    CREATE TABLE IF NOT EXISTS bronze.fsa_establishments_raw (
         bronze_id BIGSERIAL PRIMARY KEY,
         address_line1 TEXT,
         address_line2 TEXT,
@@ -101,9 +127,18 @@ cur.execute(
         structural TEXT,
         ingested_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
     );
+
+    TRUNCATE TABLE bronze.fsa_establishments_raw
+    RESTART IDENTITY;
     """
 )
 
+print("Bronze table ready.")
+
+
+# ============================================================
+# 4. LOAD CSV INTO BRONZE
+# ============================================================
 
 print("Loading data into Bronze...")
 
@@ -117,18 +152,35 @@ WITH (
 """
 
 with open(LOCAL_FILE, "r", encoding="utf-8") as file:
-    cur.copy_expert(copy_sql, file)
+    cur.copy_expert(
+        copy_sql,
+        file,
+    )
 
 conn.commit()
 
+print("Data load committed.")
+
+
+# ============================================================
+# 5. CHECK NUMBER OF LOADED ROWS
+# ============================================================
 
 cur.execute(
-    "SELECT COUNT(*) FROM bronze.fsa_establishments_raw;"
+    """
+    SELECT COUNT(*)
+    FROM bronze.fsa_establishments_raw;
+    """
 )
 
 row_count = cur.fetchone()[0]
 
 print(f"Loaded {row_count:,} rows into AWS RDS Bronze.")
+
+
+# ============================================================
+# 6. CLOSE DATABASE CONNECTION
+# ============================================================
 
 cur.close()
 conn.close()

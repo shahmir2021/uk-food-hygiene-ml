@@ -1,0 +1,31 @@
+services:
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+
+    image: uk-food-hygiene-airflow:local
+    container_name: uk_food_hygiene_airflow
+
+    env_file:
+      - .env.airflow
+
+    environment:
+      AWS_PROFILE: uk-food-hygiene-dev
+      AWS_SHARED_CREDENTIALS_FILE: /home/airflow/.aws/credentials
+      AWS_CONFIG_FILE: /home/airflow/.aws/config
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+
+    command: standalone
+
+    ports:
+      - "8080:8080"
+
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./:/opt/airflow/project
+      - ${HOME}/.aws:/home/airflow/.aws:ro
+
+    restart: unless-stopped
