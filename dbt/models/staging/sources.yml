@@ -11,3 +11,29 @@ sources:
         identifier: fsa_establishments_raw
         description: "Full FSA bulk dataset loaded from the official daily open data CSV."
 
+      - name: nspl_postcodes_raw
+        description: "Raw August 2026 National Statistics Postcode Lookup loaded from AWS S3 into RDS Bronze."
+
+      - name: imd_2025_raw
+        description: "English Indices of Deprivation 2025 File 1, reduced to LSOA code, IMD rank, and IMD decile."
+
+      - name: wimd_2025_raw
+        description: "Welsh Index of Multiple Deprivation 2025, reduced to Welsh LSOA code, WIMD rank, and WIMD decile."
+
+      - name: onspd_ni_bridge_raw
+        description: "ONS Postcode Directory BT postcode bridge linking Northern Ireland postcodes to 2001 and 2021 SOA geography."
+
+      - name: nimdm_2017_raw
+        description: "Northern Ireland Multiple Deprivation Measure 2017 overall SOA ranks."
+
+      - name: simd_2020_raw
+        description: "Scottish Index of Multiple Deprivation 2020, reduced to Data Zone code, SIMD rank, and SIMD decile."
+
+      - name: onspd_scotland_bridge_raw
+        description: "ONS Postcode Directory bridge linking Scottish postcodes to 2011 Scottish Data Zones for SIMD 2020."
+
+      - name: fss_scotland_fhis_raw
+        description: "Raw Food Standards Scotland Food Hygiene Information Scheme data covering all 32 Scottish local authorities."
+
+      - name: companies_house_raw
+        description: "Companies House September 2026 basic company data snapshot, reduced to 19 fields required for food business enrichment and loaded from AWS S3 into RDS Bronze."
