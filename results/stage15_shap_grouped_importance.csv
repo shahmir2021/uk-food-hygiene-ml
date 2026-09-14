@@ -1,0 +1,11 @@
+Feature,Mean_Absolute_SHAP
+business_type,0.51294357
+local_authority_name,0.2707226
+deprivation_score_uk,0.24189743
+region_code,0.17191939
+longitude_missing,0.09754278
+latitude,0.07899832
+longitude,0.065430984
+country_code,0.05466641
+deprivation_missing,0.033191536
+latitude_missing,0.0065344214
