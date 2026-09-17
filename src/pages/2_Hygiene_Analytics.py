@@ -20,10 +20,17 @@ st.set_page_config(
 
 # ============================================================
 # 2. DATA LOCATION
+#
+# Works locally and on Streamlit Cloud.
 # ============================================================
 
-DATA_PATH = Path(
-    "data/raw/fsa_establishments_full.csv"
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+
+DATA_PATH = (
+    PROJECT_ROOT
+    / "data"
+    / "app"
+    / "fsa_analytics.csv.gz"
 )
 
 
@@ -46,16 +53,11 @@ st.markdown(
     """
     <style>
 
-    /* ======================================================
-       MAIN PAGE
-       ====================================================== */
-
     .block-container {
         max-width: 1500px;
         padding-top: 2rem;
         padding-bottom: 5rem;
     }
-
 
     [data-testid="stAppViewContainer"] {
         background:
@@ -67,20 +69,10 @@ st.markdown(
             #0e1117;
     }
 
-
-    /* ======================================================
-       SIDEBAR
-       ====================================================== */
-
     [data-testid="stSidebar"] {
         background: #151923;
         border-right: 1px solid rgba(255,255,255,0.06);
     }
-
-
-    /* ======================================================
-       HEADINGS
-       ====================================================== */
 
     h1 {
         font-size: 2.8rem !important;
@@ -88,24 +80,16 @@ st.markdown(
         letter-spacing: -1.4px !important;
     }
 
-
     h2 {
         margin-top: 0.5rem !important;
         font-weight: 750 !important;
     }
 
-
     h3 {
         font-weight: 700 !important;
     }
 
-
-    /* ======================================================
-       METRIC CARDS
-       ====================================================== */
-
     [data-testid="stMetric"] {
-
         background:
             linear-gradient(
                 145deg,
@@ -114,40 +98,25 @@ st.markdown(
             );
 
         border: 1px solid rgba(255,255,255,0.08);
-
         border-radius: 18px;
-
         padding: 20px 22px;
-
         min-height: 125px;
 
         box-shadow:
             0px 8px 28px rgba(0,0,0,0.15);
     }
 
-
     [data-testid="stMetricLabel"] {
-
         color: #91a4bb !important;
-
         font-weight: 650 !important;
     }
 
-
     [data-testid="stMetricValue"] {
-
         font-size: 2rem !important;
-
         font-weight: 800 !important;
     }
 
-
-    /* ======================================================
-       CONTAINERS
-       ====================================================== */
-
     [data-testid="stVerticalBlockBorderWrapper"] {
-
         background:
             linear-gradient(
                 145deg,
@@ -156,42 +125,34 @@ st.markdown(
             );
 
         border-radius: 18px !important;
-
         border-color: rgba(255,255,255,0.08) !important;
     }
 
-
     /* ======================================================
-       BIG ANALYTICS NAVIGATION
+       BIG DASHBOARD NAVIGATION
        ====================================================== */
 
     [data-testid="stTabs"] [data-baseweb="tab-list"] {
-
         gap: 12px;
-
         background: rgba(15, 23, 42, 0.72);
-
         padding: 10px;
-
         border-radius: 18px;
 
-        border: 1px solid rgba(255,255,255,0.08);
+        border:
+            1px solid rgba(255,255,255,0.08);
 
         margin-top: 8px;
-
         margin-bottom: 28px;
 
         box-shadow:
             0px 10px 30px rgba(0,0,0,0.13);
     }
 
-
-    [data-testid="stTabs"] button[data-baseweb="tab"] {
-
+    [data-testid="stTabs"]
+    button[data-baseweb="tab"] {
         height: 66px;
 
         padding-left: 24px;
-
         padding-right: 24px;
 
         border-radius: 13px;
@@ -203,20 +164,15 @@ st.markdown(
             1px solid rgba(255,255,255,0.06);
 
         font-size: 0.96rem;
-
         font-weight: 700;
-
         color: #aebed1;
 
         transition: all 0.2s ease;
-
         flex: 1;
     }
 
-
     [data-testid="stTabs"]
     button[data-baseweb="tab"]:hover {
-
         background:
             rgba(56, 189, 248, 0.10);
 
@@ -224,15 +180,11 @@ st.markdown(
             rgba(56, 189, 248, 0.35);
 
         color: white;
-
-        transform:
-            translateY(-1px);
+        transform: translateY(-1px);
     }
-
 
     [data-testid="stTabs"]
     button[data-baseweb="tab"][aria-selected="true"] {
-
         background:
             linear-gradient(
                 135deg,
@@ -249,56 +201,26 @@ st.markdown(
             0px 5px 18px rgba(239, 68, 68, 0.10);
     }
 
-
     [data-testid="stTabs"]
     [data-baseweb="tab-highlight"] {
-
         display: none;
     }
 
-
-    /* ======================================================
-       EXPANDERS
-       ====================================================== */
-
     [data-testid="stExpander"] {
-
         border-radius: 14px;
-
-        border-color:
-            rgba(255,255,255,0.08);
+        border-color: rgba(255,255,255,0.08);
     }
 
-
-    /* ======================================================
-       DATA TABLES
-       ====================================================== */
-
     [data-testid="stDataFrame"] {
-
         border-radius: 14px;
-
         overflow: hidden;
     }
 
-
-    /* ======================================================
-       DIVIDERS
-       ====================================================== */
-
     hr {
-
-        border-color:
-            rgba(255,255,255,0.07) !important;
+        border-color: rgba(255,255,255,0.07) !important;
     }
 
-
-    /* ======================================================
-       FOOTER
-       ====================================================== */
-
     footer {
-
         visibility: hidden;
     }
 
@@ -309,7 +231,7 @@ st.markdown(
 
 
 # ============================================================
-# 4. HELPER FUNCTIONS
+# 4. HELPERS
 # ============================================================
 
 def normalise_authority(value):
@@ -329,11 +251,7 @@ def normalise_authority(value):
     ]
 
     for text in replacements:
-
-        value = value.replace(
-            text,
-            "",
-        )
+        value = value.replace(text, "")
 
     return value.strip()
 
@@ -363,22 +281,20 @@ def chart_style(chart):
 
 
 # ============================================================
-# 5. LOAD FSA DATA
+# 5. LOAD FSA ANALYTICS DATA
 # ============================================================
 
 @st.cache_data
 def load_fsa_data():
 
     if not DATA_PATH.exists():
-
         return None
 
-
-    header = pd.read_csv(
+    df = pd.read_csv(
         DATA_PATH,
-        nrows=0,
+        compression="gzip",
+        low_memory=False,
     )
-
 
     required_columns = [
         "BusinessType",
@@ -386,56 +302,49 @@ def load_fsa_data():
         "RatingValue",
     ]
 
-
-    available_columns = [
+    missing_columns = [
         column
         for column in required_columns
-        if column in header.columns
+        if column not in df.columns
     ]
 
+    if missing_columns:
+        raise ValueError(
+            f"Analytics dataset is missing columns: "
+            f"{missing_columns}"
+        )
 
-    df = pd.read_csv(
-        DATA_PATH,
-        usecols=available_columns,
-        low_memory=False,
-    )
-
-
-    # Convert rating to numeric
+    # Convert hygiene rating to number
     df["rating_numeric"] = pd.to_numeric(
         df["RatingValue"],
         errors="coerce",
     )
 
-
-    # Keep valid 0 to 5 ratings
+    # Keep valid 0 to 5 FHRS ratings
     df = df[
         df["rating_numeric"].isin(
             [0, 1, 2, 3, 4, 5]
         )
     ].copy()
 
-
+    # Project classification target
     # 0, 1, 2 = low hygiene
+    # 3, 4, 5 = not low
     df["low_hygiene"] = (
         df["rating_numeric"] <= 2
     ).astype(int)
 
-
-    # Used for ONS matching
+    # Normalised authority name for ONS matching
     df["authority_key"] = (
         df["LocalAuthorityName"]
-        .apply(
-            normalise_authority
-        )
+        .apply(normalise_authority)
     )
-
 
     return df
 
 
 # ============================================================
-# 6. LOAD REGION LOOKUP
+# 6. LOAD ONS REGION LOOKUP
 # ============================================================
 
 @st.cache_data(ttl=86400)
@@ -450,22 +359,16 @@ def load_region_lookup():
 
         response.raise_for_status()
 
-
         lookup = pd.read_csv(
-            StringIO(
-                response.text
-            )
+            StringIO(response.text)
         )
-
 
         if (
             "LAD23NM" not in lookup.columns
             or
             "RGN23NM" not in lookup.columns
         ):
-
             return None
-
 
         lookup = (
             lookup[
@@ -478,20 +381,14 @@ def load_region_lookup():
             .copy()
         )
 
-
         lookup["authority_key"] = (
             lookup["LAD23NM"]
-            .apply(
-                normalise_authority
-            )
+            .apply(normalise_authority)
         )
-
 
         return lookup
 
-
     except Exception:
-
         return None
 
 
@@ -499,22 +396,34 @@ def load_region_lookup():
 # 7. LOAD DATA
 # ============================================================
 
-df = load_fsa_data()
+try:
 
+    df = load_fsa_data()
 
-if df is None:
+except Exception as error:
 
     st.error(
-        "Could not find data/raw/fsa_establishments_full.csv"
+        f"Could not load analytics dataset: {error}"
     )
 
     st.stop()
 
 
-FULL_DATA_COUNT = len(
-    df
-)
+if df is None:
 
+    st.error(
+        f"Could not find analytics dataset: {DATA_PATH}"
+    )
+
+    st.stop()
+
+
+FULL_DATA_COUNT = len(df)
+
+
+# ============================================================
+# 8. ADD REGION INFORMATION
+# ============================================================
 
 region_lookup = load_region_lookup()
 
@@ -532,14 +441,11 @@ if region_lookup is not None:
         how="left",
     )
 
-
     df = df.rename(
         columns={
-            "RGN23NM":
-                "region"
+            "RGN23NM": "region"
         }
     )
-
 
 else:
 
@@ -547,22 +453,18 @@ else:
 
 
 # ============================================================
-# 8. HERO SECTION
+# 9. HERO SECTION
 # ============================================================
 
-with st.container(
-    border=True
-):
+with st.container(border=True):
 
     st.caption(
         "UK FOOD HYGIENE ML  •  ANALYTICS DASHBOARD"
     )
 
-
     st.title(
         "📊 Food Hygiene Intelligence"
     )
-
 
     st.write(
         """
@@ -573,26 +475,19 @@ with st.container(
         """
     )
 
-
-    hero1, hero2, hero3, hero4 = st.columns(
-        4
-    )
-
+    hero1, hero2, hero3, hero4 = st.columns(4)
 
     hero1.caption(
         "🏛️ Food Standards Agency"
     )
 
-
     hero2.caption(
         "⭐ FHRS ratings 0 to 5"
     )
 
-
     hero3.caption(
         "📍 Local and regional analysis"
     )
-
 
     hero4.caption(
         "🤖 Machine learning project"
@@ -603,7 +498,7 @@ st.write("")
 
 
 # ============================================================
-# 9. FILTERS
+# 10. DASHBOARD FILTERS
 # ============================================================
 
 with st.expander(
@@ -615,14 +510,12 @@ with st.expander(
         [2, 1]
     )
 
-
     business_types = sorted(
         df["BusinessType"]
         .dropna()
         .unique()
         .tolist()
     )
-
 
     with filter_col1:
 
@@ -631,9 +524,8 @@ with st.expander(
             options=business_types,
             default=[],
             placeholder="All business types",
-            key="analytics_business_filter_final_v2",
+            key="analytics_business_filter_cloud",
         )
-
 
     with filter_col2:
 
@@ -643,12 +535,12 @@ with st.expander(
             max_value=3000,
             value=500,
             step=50,
-            key="analytics_minimum_sample_final_v2",
+            key="analytics_minimum_sample_cloud",
         )
 
 
 # ============================================================
-# 10. APPLY FILTERS
+# 11. APPLY FILTERS
 # ============================================================
 
 filtered = df.copy()
@@ -664,25 +556,20 @@ if selected_businesses:
 
 
 # ============================================================
-# 11. KPI VALUES
+# 12. KPIs
 # ============================================================
 
-total = len(
-    filtered
-)
-
+total = len(filtered)
 
 low_count = int(
-    filtered["low_hygiene"]
-    .sum()
+    filtered["low_hygiene"].sum()
 )
 
 
 if total > 0:
 
     low_rate = (
-        filtered["low_hygiene"]
-        .mean()
+        filtered["low_hygiene"].mean()
         * 100
     )
 
@@ -692,28 +579,20 @@ else:
 
 
 authority_count = (
-    filtered[
-        "LocalAuthorityName"
-    ]
+    filtered["LocalAuthorityName"]
     .nunique()
 )
 
 
-# ============================================================
-# 12. KPI CARDS
-# ============================================================
-
-k1, k2, k3, k4 = st.columns(
-    4
-)
+k1, k2, k3, k4 = st.columns(4)
 
 
 k1.metric(
     label="Rated establishments",
     value=f"{total:,}",
     help=(
-        f"Full numeric FHRS dataset contains "
-        f"{FULL_DATA_COUNT:,} establishments."
+        f"Full valid FHRS dataset contains "
+        f"{FULL_DATA_COUNT:,} rated establishments."
     ),
 )
 
@@ -721,10 +600,7 @@ k1.metric(
 k2.metric(
     label="Low rated businesses",
     value=f"{low_count:,}",
-    help=(
-        "Businesses with FHRS ratings "
-        "0, 1 or 2."
-    ),
+    help="Businesses with FHRS ratings 0, 1 or 2.",
 )
 
 
@@ -732,8 +608,8 @@ k3.metric(
     label="Low rating rate",
     value=f"{low_rate:.1f}%",
     help=(
-        "Share of establishments with "
-        "ratings 0, 1 or 2."
+        "Share of rated establishments "
+        "with ratings 0, 1 or 2."
     ),
 )
 
@@ -758,7 +634,6 @@ st.write("")
 st.header(
     "Explore the dashboard"
 )
-
 
 st.caption(
     "Select a section below to explore national patterns, "
@@ -792,22 +667,19 @@ with overview_tab:
         "UK hygiene rating landscape"
     )
 
-
     st.caption(
         "FHRS ratings 0, 1 and 2 are treated "
         "as low hygiene ratings in this project."
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # Rating distribution
-    # ========================================================
+    # --------------------------------------------------------
 
     rating_distribution = (
         filtered
-        .groupby(
-            "rating_numeric"
-        )
+        .groupby("rating_numeric")
         .size()
         .reindex(
             [0, 1, 2, 3, 4, 5],
@@ -819,27 +691,17 @@ with overview_tab:
     )
 
 
-    rating_distribution[
-        "percentage"
-    ] = (
-        rating_distribution[
-            "establishments"
-        ]
+    rating_distribution["percentage"] = (
+        rating_distribution["establishments"]
         /
-        rating_distribution[
-            "establishments"
-        ].sum()
+        rating_distribution["establishments"].sum()
         *
         100
     )
 
 
-    rating_distribution[
-        "rating"
-    ] = (
-        rating_distribution[
-            "rating_numeric"
-        ]
+    rating_distribution["rating"] = (
+        rating_distribution["rating_numeric"]
         .astype(int)
         .astype(str)
     )
@@ -850,20 +712,17 @@ with overview_tab:
     )
 
 
-    # ========================================================
-    # Rating chart
-    # ========================================================
+    # --------------------------------------------------------
+    # Rating distribution chart
+    # --------------------------------------------------------
 
     with overview_left:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Hygiene rating distribution"
             )
-
 
             st.caption(
                 "Percentage is used instead of raw count "
@@ -904,12 +763,8 @@ with overview_tab:
 
                     color=alt.condition(
                         "datum.rating_numeric <= 2",
-                        alt.value(
-                            "#f87171"
-                        ),
-                        alt.value(
-                            "#38bdf8"
-                        ),
+                        alt.value("#f87171"),
+                        alt.value("#38bdf8"),
                     ),
 
                     tooltip=[
@@ -980,24 +835,20 @@ with overview_tab:
             )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # Donut chart
-    # ========================================================
+    # --------------------------------------------------------
 
     with overview_right:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Low rating split"
             )
 
-
             st.caption(
-                "Ratings 0 to 2 compared with "
-                "ratings 3 to 5."
+                "Ratings 0 to 2 compared with ratings 3 to 5."
             )
 
 
@@ -1007,6 +858,7 @@ with overview_tab:
                         "Ratings 0 to 2",
                         "Ratings 3 to 5",
                     ],
+
                     "Count": [
                         low_count,
                         total - low_count,
@@ -1066,9 +918,7 @@ with overview_tab:
 
 
             st.altair_chart(
-                chart_style(
-                    donut
-                ),
+                chart_style(donut),
                 use_container_width=True,
             )
 
@@ -1076,18 +926,15 @@ with overview_tab:
     st.write("")
 
 
-    # ========================================================
-    # Low rated businesses by area
-    # ========================================================
+    # --------------------------------------------------------
+    # Low rating count by authority
+    # --------------------------------------------------------
 
-    with st.container(
-        border=True
-    ):
+    with st.container(border=True):
 
         st.subheader(
             "Areas with the largest number of low rated businesses"
         )
-
 
         st.caption(
             f"Only authorities with at least "
@@ -1105,6 +952,7 @@ with overview_tab:
                     "low_hygiene",
                     "size",
                 ),
+
                 low_rated=(
                     "low_hygiene",
                     "sum",
@@ -1185,7 +1033,7 @@ with overview_tab:
 
 # ============================================================
 # TAB 2
-# REGIONS
+# REGIONAL ANALYSIS
 # ============================================================
 
 with region_tab:
@@ -1194,7 +1042,6 @@ with region_tab:
         "Regional food hygiene intelligence"
     )
 
-
     st.caption(
         "English local authorities are matched "
         "to their corresponding ONS region."
@@ -1202,9 +1049,7 @@ with region_tab:
 
 
     regional_df = filtered.dropna(
-        subset=[
-            "region"
-        ]
+        subset=["region"]
     ).copy()
 
 
@@ -1215,17 +1060,12 @@ with region_tab:
             "City and local authority analytics still work."
         )
 
-
     else:
 
         match_rate = (
-            len(
-                regional_df
-            )
+            len(regional_df)
             /
-            len(
-                filtered
-            )
+            len(filtered)
             *
             100
         )
@@ -1239,18 +1079,18 @@ with region_tab:
 
         region_stats = (
             regional_df
-            .groupby(
-                "region"
-            )
+            .groupby("region")
             .agg(
                 establishments=(
                     "low_hygiene",
                     "size",
                 ),
+
                 low_rated=(
                     "low_hygiene",
                     "sum",
                 ),
+
                 low_rating_rate=(
                     "low_hygiene",
                     "mean",
@@ -1260,31 +1100,22 @@ with region_tab:
         )
 
 
-        region_stats[
-            "low_rating_rate_pct"
-        ] = (
-            region_stats[
-                "low_rating_rate"
-            ]
-            *
-            100
+        region_stats["low_rating_rate_pct"] = (
+            region_stats["low_rating_rate"]
+            * 100
         )
 
 
-        region_left, region_right = st.columns(
-            2
-        )
+        region_left, region_right = st.columns(2)
 
 
-        # ====================================================
-        # Region risk
-        # ====================================================
+        # ----------------------------------------------------
+        # Region risk rate
+        # ----------------------------------------------------
 
         with region_left:
 
-            with st.container(
-                border=True
-            ):
+            with st.container(border=True):
 
                 st.subheader(
                     "Low rating rate by region"
@@ -1351,15 +1182,13 @@ with region_tab:
                 )
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # Region volume
-        # ====================================================
+        # ----------------------------------------------------
 
         with region_right:
 
-            with st.container(
-                border=True
-            ):
+            with st.container(border=True):
 
                 st.subheader(
                     "Rated establishments by region"
@@ -1417,13 +1246,11 @@ with region_tab:
         st.write("")
 
 
-        # ====================================================
+        # ----------------------------------------------------
         # Region explorer
-        # ====================================================
+        # ----------------------------------------------------
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Explore a region"
@@ -1433,20 +1260,16 @@ with region_tab:
             selected_region = st.selectbox(
                 "Region",
                 sorted(
-                    regional_df[
-                        "region"
-                    ]
+                    regional_df["region"]
                     .dropna()
                     .unique()
                 ),
-                key="region_explorer_final_v2",
+                key="region_explorer_cloud",
             )
 
 
             selected_region_df = regional_df[
-                regional_df[
-                    "region"
-                ]
+                regional_df["region"]
                 ==
                 selected_region
             ].copy()
@@ -1460,24 +1283,20 @@ with region_tab:
             selected_region_low = int(
                 selected_region_df[
                     "low_hygiene"
-                ]
-                .sum()
+                ].sum()
             )
 
 
             selected_region_rate = (
                 selected_region_df[
                     "low_hygiene"
-                ]
-                .mean()
+                ].mean()
                 *
                 100
             )
 
 
-            r1, r2, r3 = st.columns(
-                3
-            )
+            r1, r2, r3 = st.columns(3)
 
 
             r1.metric(
@@ -1508,6 +1327,7 @@ with region_tab:
                         "low_hygiene",
                         "size",
                     ),
+
                     low_rating_rate=(
                         "low_hygiene",
                         "mean",
@@ -1582,9 +1402,7 @@ with region_tab:
                 .properties(
                     height=max(
                         350,
-                        len(
-                            region_authority_stats
-                        )
+                        len(region_authority_stats)
                         * 25,
                     )
                 )
@@ -1602,13 +1420,11 @@ with region_tab:
         st.write("")
 
 
-        # ====================================================
-        # Heatmap
-        # ====================================================
+        # ----------------------------------------------------
+        # Region x business heatmap
+        # ----------------------------------------------------
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Business type risk across regions"
@@ -1628,6 +1444,7 @@ with region_tab:
                         "low_hygiene",
                         "size",
                     ),
+
                     low_rating_rate=(
                         "low_hygiene",
                         "mean",
@@ -1645,9 +1462,7 @@ with region_tab:
             ].copy()
 
 
-            heatmap_data[
-                "risk_pct"
-            ] = (
+            heatmap_data["risk_pct"] = (
                 heatmap_data[
                     "low_rating_rate"
                 ]
@@ -1718,9 +1533,7 @@ with region_tab:
 
 
             st.altair_chart(
-                chart_style(
-                    heatmap
-                ),
+                chart_style(heatmap),
                 use_container_width=True,
             )
 
@@ -1735,7 +1548,6 @@ with authority_tab:
     st.header(
         "Cities and local authorities"
     )
-
 
     st.caption(
         "Compare food hygiene patterns across "
@@ -1753,10 +1565,12 @@ with authority_tab:
                 "low_hygiene",
                 "size",
             ),
+
             low_rated=(
                 "low_hygiene",
                 "sum",
             ),
+
             low_rating_rate=(
                 "low_hygiene",
                 "mean",
@@ -1788,18 +1602,15 @@ with authority_tab:
     )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # Bubble chart
-    # ========================================================
+    # --------------------------------------------------------
 
-    with st.container(
-        border=True
-    ):
+    with st.container(border=True):
 
         st.subheader(
             "Risk versus number of food businesses"
         )
-
 
         st.caption(
             "Each bubble represents a local authority. "
@@ -1891,20 +1702,16 @@ with authority_tab:
     st.write("")
 
 
-    authority_left, authority_right = st.columns(
-        2
-    )
+    authority_left, authority_right = st.columns(2)
 
 
-    # ========================================================
-    # Highest low rating rates
-    # ========================================================
+    # --------------------------------------------------------
+    # Highest rates
+    # --------------------------------------------------------
 
     with authority_left:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Highest low rating rates"
@@ -1975,15 +1782,13 @@ with authority_tab:
             )
 
 
-    # ========================================================
-    # Largest food business areas
-    # ========================================================
+    # --------------------------------------------------------
+    # Largest areas
+    # --------------------------------------------------------
 
     with authority_right:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Largest food business areas"
@@ -2051,13 +1856,11 @@ with authority_tab:
     st.write("")
 
 
-    # ========================================================
-    # Individual authority explorer
-    # ========================================================
+    # --------------------------------------------------------
+    # Authority explorer
+    # --------------------------------------------------------
 
-    with st.container(
-        border=True
-    ):
+    with st.container(border=True):
 
         st.subheader(
             "Explore a city or local authority"
@@ -2073,7 +1876,7 @@ with authority_tab:
                 .dropna()
                 .unique()
             ),
-            key="authority_explorer_final_v2",
+            key="authority_explorer_cloud",
         )
 
 
@@ -2109,9 +1912,7 @@ with authority_tab:
         )
 
 
-        a1, a2, a3 = st.columns(
-            3
-        )
+        a1, a2, a3 = st.columns(3)
 
 
         a1.metric(
@@ -2173,12 +1974,8 @@ with authority_tab:
 
                 color=alt.condition(
                     "datum.rating_numeric <= 2",
-                    alt.value(
-                        "#f87171"
-                    ),
-                    alt.value(
-                        "#38bdf8"
-                    ),
+                    alt.value("#f87171"),
+                    alt.value("#38bdf8"),
                 ),
 
                 tooltip=[
@@ -2219,7 +2016,6 @@ with business_tab:
         "Food business category intelligence"
     )
 
-
     st.caption(
         "Compare low hygiene rates and establishment "
         "volume across different food business categories."
@@ -2236,10 +2032,12 @@ with business_tab:
                 "low_hygiene",
                 "size",
             ),
+
             low_rated=(
                 "low_hygiene",
                 "sum",
             ),
+
             low_rating_rate=(
                 "low_hygiene",
                 "mean",
@@ -2260,20 +2058,16 @@ with business_tab:
     )
 
 
-    business_left, business_right = st.columns(
-        2
-    )
+    business_left, business_right = st.columns(2)
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # Business type risk
-    # ========================================================
+    # --------------------------------------------------------
 
     with business_left:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Low rating rate by business type"
@@ -2348,15 +2142,13 @@ with business_tab:
             )
 
 
-    # ========================================================
+    # --------------------------------------------------------
     # Business volume
-    # ========================================================
+    # --------------------------------------------------------
 
     with business_right:
 
-        with st.container(
-            border=True
-        ):
+        with st.container(border=True):
 
             st.subheader(
                 "Establishments by business type"
@@ -2423,13 +2215,11 @@ with business_tab:
     st.write("")
 
 
-    # ========================================================
-    # Business summary table
-    # ========================================================
+    # --------------------------------------------------------
+    # Business type table
+    # --------------------------------------------------------
 
-    with st.container(
-        border=True
-    ):
+    with st.container(border=True):
 
         st.subheader(
             "Business type summary"
@@ -2507,7 +2297,6 @@ with business_tab:
 # ============================================================
 
 st.divider()
-
 
 st.caption(
     "UK Food Hygiene ML  •  Food Standards Agency data  •  "
